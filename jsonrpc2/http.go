@@ -13,6 +13,7 @@ import (
 )
 
 const contentType = "application/json"
+const charset = "utf-8"
 
 type contextKey int
 
@@ -131,7 +132,8 @@ func (conn *httpClientConn) Write(buf []byte) (int, error) {
 	go func() {
 		req, err := http.NewRequest("POST", conn.url, bytes.NewReader(b))
 		if err == nil {
-			req.Header.Add("Content-Type", contentType)
+			contentTypeValue := fmt.Sprintf("%s; charset=%s", contentType, charset)
+			req.Header.Add("Content-Type", contentTypeValue)
 			req.Header.Add("Accept", contentType)
 			var resp *http.Response
 			resp, err = conn.doer.Do(req)
